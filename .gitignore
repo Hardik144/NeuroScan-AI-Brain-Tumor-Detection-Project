@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+*.zip
+models/*.pt
+dataset/
+Dataset/
+static/photos/*
+!static/photos/.gitkeep
