@@ -1,9 +1,9 @@
 # 🧠 NeuroScan AI — Brain Tumor Detection & Diagnostic Platform
 
-> An end-to-end deep learning project for classifying brain tumors (Glioma, Meningioma, Pituitary) from clinical MRI scans using ResNet-50.
+> An end-to-end deep learning project for classifying brain tumors from clinical MRI scans using ResNet-50.
 
-## Overview
-This project implements a transfer learning vision pipeline to aid in early brain tumor diagnosis.
+## Dataset Preparation
+Run `python prepare_dataset.py` to extract Figshare .mat slices into normalized JPEGs and lesion masks.
 
 ## Author
 Hardik
