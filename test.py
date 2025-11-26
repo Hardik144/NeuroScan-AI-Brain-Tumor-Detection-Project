@@ -1,3 +1,2 @@
-import argparse, sys
-parser = argparse.ArgumentParser()
-parser.add_argument('--image', required=True)
+import argparse, torch, os
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
