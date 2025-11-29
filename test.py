@@ -1,4 +1,3 @@
-# NeuroScan AI - Clinical Vision CLI Runner
 import os
 import sys
 import argparse
