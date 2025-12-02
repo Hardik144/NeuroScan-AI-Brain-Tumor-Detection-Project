@@ -1,5 +1,6 @@
 import flask, os
 app = flask.Flask(__name__, template_folder='templates')
-@app.route('/api/sample/<filename>')
-def api_sample(filename):
-    return flask.send_from_directory('Brain-Tumor-Test-Images', filename)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+@app.errorhandler(500)
+def server_error(e):
+    return flask.render_template('error.html'), 500
