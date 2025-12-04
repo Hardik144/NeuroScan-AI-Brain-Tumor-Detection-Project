@@ -1,1 +1,346 @@
-<!DOCTYPE html><html><head><title>NeuroScan AI</title></head><body><h1>NeuroScan AI Workspace</h1><div id="dropzone">Drop MRI here</div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroScan AI — Brain Tumor Detection & Diagnostic Platform</title>
+  <meta name="description" content="State-of-the-art Deep Learning Clinical MRI Classification Platform utilizing ResNet50 for high-accuracy brain tumor detection.">
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Top Glassmorphic Navigation -->
+  <header class="navbar">
+    <a href="/" class="brand">
+      <div class="brand-icon">🧠</div>
+      <div>
+        <div class="brand-title">NeuroScan AI</div>
+        <div class="brand-subtitle">ResNet50 Clinical Vision v2.1</div>
+      </div>
+    </a>
+
+    <div class="nav-status">
+      <div class="badge-status">
+        <span class="pulse-dot"></span>
+        <span>INFERENCE ENGINE ONLINE</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#workspace" class="nav-link-btn">Console</a>
+        <a href="#atlas" class="nav-link-btn">Tumor Atlas</a>
+        <a href="#disclaimer" class="nav-link-btn">Clinical Protocol</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-tag">
+        <span>⚡ Deep Residual Learning for Neuro-Oncology</span>
+      </div>
+      <h1 class="hero-title">
+        Intelligent <span>Brain Tumor Classification</span>
+      </h1>
+      <p class="hero-desc">
+        Upload T1-weighted contrast-enhanced MRI scans for instant multi-class tumor detection, confidence telemetry, and clinical differential breakdown.
+      </p>
+    </section>
+
+    <!-- Interactive Workspace Grid -->
+    <section id="workspace" class="workspace-grid">
+      
+      <!-- Left Panel: Upload & Radiology Inspection Viewer -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="panel-icon">🔬</span>
+            <div>
+              <h2 class="panel-title">MRI Scan Acquisition</h2>
+              <div class="panel-subtitle">DICOM / JPEG / PNG Contrast Sequences</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <!-- Drag & Drop Upload Zone -->
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload MRI Scan">
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
+            <div class="dropzone-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div class="dropzone-title">Drop MRI scan here or click to browse</div>
+            <div class="dropzone-desc">Accepts axial, sagittal, or coronal MRI slice images</div>
+            <div class="dropzone-badges">
+              <span class="file-format-badge">PNG</span>
+              <span class="file-format-badge">JPG</span>
+              <span class="file-format-badge">JPEG</span>
+              <span class="file-format-badge">512×512 Res</span>
+            </div>
+          </div>
+
+          <!-- Live Image Preview & Radiology Viewer Frame -->
+          <div id="preview-wrapper" class="preview-wrapper">
+            
+            <div id="scan-canvas" class="image-canvas-container">
+              <div class="radar-grid"></div>
+              <div class="scan-line"></div>
+              <img id="mri-preview-img" alt="MRI Scan Preview" src="">
+            </div>
+
+            <!-- Inspection Tools Bar -->
+            <div class="viewer-controls">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+                RADIOLOGY ENHANCEMENT
+              </span>
+              <div class="control-group">
+                <button type="button" id="tool-invert" class="tool-btn" title="Toggle Inverted Grayscale (Negative MRI mode)">
+                  <span>🌓 Invert Mode</span>
+                </button>
+                <button type="button" id="tool-contrast" class="tool-btn" title="Enhance Soft Tissue Contrast">
+                  <span>🔆 High Contrast</span>
+                </button>
+                <button type="button" id="tool-reset" class="tool-btn" title="Reset View Filters">
+                  <span>↺ Reset</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Predict CTA Button -->
+            <button type="button" id="btn-predict" class="btn-primary-action">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m10 15 5-3-5-3v6Z"/>
+              </svg>
+              Execute Neural Inference
+            </button>
+          </div>
+
+          <!-- Sample MRI Quick Pick -->
+          <div class="samples-section">
+            <div class="samples-title">
+              <span>Or Test With Sample Patient Scans</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 400;">(One-Click Evaluation)</span>
+            </div>
+            <div class="sample-pills">
+              <button type="button" class="sample-btn" data-sample="1.jpg">
+                <span>Scan #1</span>
+                <span class="sample-tag glioma">Glioma</span>
+              </button>
+              <button type="button" class="sample-btn" data-sample="2.jpg">
+                <span>Scan #2</span>
+                <span class="sample-tag meningioma">Meningioma</span>
+              </button>
+              <button type="button" class="sample-btn" data-sample="3.jpg">
+                <span>Scan #3</span>
+                <span class="sample-tag pituitary">Pituitary</span>
+              </button>
+              <button type="button" class="sample-btn" data-sample="4.jpg">
+                <span>Scan #4</span>
+                <span class="sample-tag glioma">Glioma</span>
+              </button>
+              <button type="button" class="sample-btn" data-sample="5.jpg">
+                <span>Scan #5</span>
+                <span class="sample-tag meningioma">Meningioma</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Panel: Telemetry & Clinical Diagnosis Console -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="panel-icon">📊</span>
+            <div>
+              <h2 class="panel-title">Diagnostic Analysis</h2>
+              <div class="panel-subtitle">Neural Probabilities & Differential Report</div>
+            </div>
+          </div>
+          <button type="button" id="btn-print-report" class="tool-btn" title="Export / Print Clinical Diagnostic Report">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Print
+          </button>
+        </div>
+
+        <div class="panel-body">
+          
+          <!-- Empty State before analysis -->
+          <div id="results-empty" class="results-empty-state">
+            <div class="empty-state-icon">📡</div>
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Inference Engine Idle</h3>
+            <p style="font-size: 0.88rem; max-width: 320px;">Upload an MRI scan or select a sample image on the left to generate classification telemetry.</p>
+          </div>
+
+          <!-- Populated Results Content -->
+          <div id="results-content" class="results-content">
+            
+            <!-- Diagnosis Hero Card -->
+            <div id="diagnosis-hero-card" class="diagnosis-card">
+              <div class="diagnosis-top">
+                <span id="diagnosis-badge" class="diagnosis-label-badge">Analyzing...</span>
+                <span id="diagnosis-timestamp" class="diagnosis-timestamp">--:--:--</span>
+              </div>
+              <div id="diagnosis-title" class="diagnosis-name">--</div>
+              <div class="confidence-metric-row">
+                <span id="confidence-number" class="confidence-val">0.0%</span>
+                <span class="confidence-caption">Prediction Confidence Score</span>
+              </div>
+            </div>
+
+            <!-- Multiclass Probability Distribution -->
+            <div class="probabilities-box">
+              <div class="box-heading">
+                <span>Multi-Class Softmax Distribution</span>
+                <span style="font-size: 0.72rem; color: var(--accent-cyan);">ResNet50 LogSigmoid</span>
+              </div>
+
+              <div class="prob-row">
+                <div class="prob-meta">
+                  <span class="prob-name">🔴 Glioma</span>
+                  <span id="pct-glioma" class="prob-percentage">0.0%</span>
+                </div>
+                <div class="prob-bar-track">
+                  <div id="bar-glioma" class="prob-bar-fill glioma"></div>
+                </div>
+              </div>
+
+              <div class="prob-row">
+                <div class="prob-meta">
+                  <span class="prob-name">🟡 Meningioma</span>
+                  <span id="pct-meningioma" class="prob-percentage">0.0%</span>
+                </div>
+                <div class="prob-bar-track">
+                  <div id="bar-meningioma" class="prob-bar-fill meningioma"></div>
+                </div>
+              </div>
+
+              <div class="prob-row">
+                <div class="prob-meta">
+                  <span class="prob-name">🟣 Pituitary</span>
+                  <span id="pct-pituitary" class="prob-percentage">0.0%</span>
+                </div>
+                <div class="prob-bar-track">
+                  <div id="bar-pituitary" class="prob-bar-fill pituitary"></div>
+                </div>
+              </div>
+
+              <div class="prob-row">
+                <div class="prob-meta">
+                  <span class="prob-name">🟢 Normal / None</span>
+                  <span id="pct-none" class="prob-percentage">0.0%</span>
+                </div>
+                <div class="prob-bar-track">
+                  <div id="bar-none" class="prob-bar-fill none"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Clinical Insights & Recommendations -->
+            <div class="clinical-card">
+              <div class="box-heading">
+                <span>Clinical Overview & Protocol</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted);">FIGSHARE REFERENCE</span>
+              </div>
+              <p id="clinical-desc" class="clinical-text">--</p>
+              <ul id="clinical-findings" class="clinical-bullets"></ul>
+            </div>
+
+            <!-- Medical Disclaimer -->
+            <div id="disclaimer" class="disclaimer-box">
+              <span class="disclaimer-icon">⚠️</span>
+              <div class="disclaimer-text">
+                <strong>Investigational Software Notice:</strong> This platform is designed for research, academic evaluation, and preliminary assistive screening. Results should be verified by certified board radiologists prior to therapeutic decisions.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Tumor Atlas / Knowledge Base -->
+    <section id="atlas" class="atlas-section">
+      <div class="section-header">
+        <h2 class="section-title">Brain Tumor Pathology Atlas</h2>
+        <p class="section-subtitle">Key histological categories and imaging characteristics classified by the model</p>
+      </div>
+
+      <div class="atlas-grid">
+        
+        <div class="atlas-card glioma-card">
+          <div class="atlas-icon-box">🔴</div>
+          <h3 class="atlas-title">Glioma</h3>
+          <p class="atlas-desc">
+            Originates from glial cells (astrocytoma, oligodendroglioma, glioblastoma multiforme). Frequently displays invasive infiltration into parenchymal tissue, central necrosis, and microvascular proliferation.
+          </p>
+          <div class="atlas-stats">
+            <span>Aggressiveness: <strong>Grade II–IV</strong></span>
+            <span>Dataset Slices: <strong>1,426</strong></span>
+          </div>
+        </div>
+
+        <div class="atlas-card meningioma-card">
+          <div class="atlas-icon-box">🟡</div>
+          <h3 class="atlas-title">Meningioma</h3>
+          <p class="atlas-desc">
+            Develops from arachnoid cells within the meningeal layers surrounding brain and spinal cord. Typically well-circumscribed, extra-axial, showing robust homogeneous post-gadolinium enhancement and dural tail signs.
+          </p>
+          <div class="atlas-stats">
+            <span>Aggressiveness: <strong>Mostly Grade I</strong></span>
+            <span>Dataset Slices: <strong>708</strong></span>
+          </div>
+        </div>
+
+        <div class="atlas-card pituitary-card">
+          <div class="atlas-icon-box">🟣</div>
+          <h3 class="atlas-title">Pituitary Adenoma</h3>
+          <p class="atlas-desc">
+            Sellar and suprasellar masses arising from anterior pituitary lobe epithelium. Can cause hormone dysregulation (hyperprolactinemia, Cushing's) and visual field compromise via optic chiasm compression.
+          </p>
+          <div class="atlas-stats">
+            <span>Aggressiveness: <strong>Benign Adenoma</strong></span>
+            <span>Dataset Slices: <strong>930</strong></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-credits">
+        <strong>NeuroScan AI</strong> — Engineered by Hardik • Powered by PyTorch, Torchvision ResNet50 & Flask
+      </div>
+      <div>
+        Figshare Dataset (Cheng et al., DOI: 10.6084/m9.figshare.1512427) • Educational & Research Demonstration
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast-msg" class="toast-msg" role="status" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
