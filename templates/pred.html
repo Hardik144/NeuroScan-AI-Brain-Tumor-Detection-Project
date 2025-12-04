@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosis Result — NeuroScan AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="navbar">
+    <a href="/" class="brand">
+      <div class="brand-icon">🧠</div>
+      <div>
+        <div class="brand-title">NeuroScan AI</div>
+        <div class="brand-subtitle">Clinical Diagnostic Report</div>
+      </div>
+    </a>
+    <a href="/" class="tool-btn">← Back to Workspace</a>
+  </header>
+
+  <main class="app-container" style="max-width: 800px;">
+    <div class="glass-panel" style="margin-top: 2rem;">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">📋</span>
+          <div>
+            <h2 class="panel-title">Inference Telemetry Report</h2>
+            <div class="panel-subtitle">Classification Results</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="diagnosis-card {{ result | lower }}">
+          <div class="diagnosis-top">
+            <span class="diagnosis-label-badge">Radiology Classification</span>
+          </div>
+          <div class="diagnosis-name">{{ result }} Tumor</div>
+          <div class="confidence-metric-row">
+            <span class="confidence-val">{{ "%.1f"|format(confidence) if confidence is defined else "Verified" }}%</span>
+            <span class="confidence-caption">Confidence Rating</span>
+          </div>
+        </div>
+
+        {% if probabilities is defined %}
+        <div class="probabilities-box" style="margin-top: 1.5rem;">
+          <div class="box-heading">
+            <span>Class Probabilities</span>
+          </div>
+          {% for label, prob in probabilities.items() %}
+          <div class="prob-row">
+            <div class="prob-meta">
+              <span>{{ label }}</span>
+              <span class="prob-percentage">{{ "%.1f"|format(prob) }}%</span>
+            </div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill {{ label | lower }}" style="width: {{ prob }}%;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <a href="/" class="btn-primary-action" style="margin-top: 0; text-decoration: none;">
+            Analyze Another MRI Scan
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
