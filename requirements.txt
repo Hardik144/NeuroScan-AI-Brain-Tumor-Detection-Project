@@ -2,5 +2,3 @@ flask
 torch
 torchvision
 pillow
-h5py
-scipy
