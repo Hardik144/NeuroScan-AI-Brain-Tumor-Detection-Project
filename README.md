@@ -7,14 +7,14 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Flask](https://img.shields.io/badge/Flask-Web%20App-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![ResNet50](https://img.shields.io/badge/ResNet50-Transfer%20Learning-blueviolet?style=for-the-badge)](https://pytorch.org/vision/stable/models/resnet.html)
-[![Accuracy](https://img.shields.io/badge/Model%20Accuracy-99.3%25-brightgreen?style=for-the-badge)]()
+[![Accuracy](https://img.shields.io/badge/Model%20Accuracy-86.7%25-blue?style=for-the-badge)]()
 [![License](https://img.shields.io/badge/License-MIT-1abc9c?style=for-the-badge)](LICENSE)
 
 <p align="center">
   <strong>Engineered by Hardik</strong>
 </p>
 
-> A full **end-to-end deep learning web application & diagnostic console** that classifies brain tumors from MRI scans into three primary tumor pathologies (**Glioma**, **Meningioma**, and **Pituitary**) using a **fine-tuned ResNet-50** via Transfer Learning — achieving **99.3% accuracy** — deployed as an interactive radiology dashboard and CLI suite.
+> A full **end-to-end deep learning web application & diagnostic console** that classifies brain tumors from MRI scans into three primary tumor pathologies (**Glioma**, **Meningioma**, and **Pituitary**) using a **fine-tuned ResNet-50** via Transfer Learning — achieving **86.7% accuracy** — deployed as an interactive radiology dashboard and CLI suite.
 
 </div>
 
@@ -32,6 +32,7 @@
 - [How It Works](#-how-it-works)
 - [Dataset Specifications](#-dataset-specifications)
 - [Model Architecture](#-model-architecture)
+- [Model Performance & Validation](#-model-performance--validation)
 - [Project Structure](#-project-structure)
 - [Getting Started & Installation](#-getting-started--installation)
 - [Usage Guide](#-usage-guide)
@@ -48,7 +49,7 @@
 
 ## ✨ Key Features
 
-- **⚡ High-Precision Classification**: Transfer learning with ResNet-50 trained on 3,064 contrast-enhanced T1-weighted MRI images, achieving ~99.3% multi-class accuracy.
+- **⚡ High-Precision Classification**: Transfer learning with ResNet-50 trained on 3,064 contrast-enhanced T1-weighted MRI images, achieving ~86.7% test accuracy across patient slices.
 - **🖥️ Modern Radiology Diagnostic Console**:
   - Dark-mode glassmorphic interface with real-time feedback.
   - Interactive **Drag-and-Drop** upload area with instant client-side preview.
@@ -136,6 +137,21 @@ The classification backbone leverages **ResNet-50** (Residual Network with 50 la
         │
 [LogSigmoid Activation] ──▶ Softmax Probabilities
 ```
+
+---
+
+## 📈 Model Performance & Validation
+
+The model was evaluated using a **70% / 15% / 15% train, validation, and held-out test split** (460 unseen MRI slices) to prevent patient-level data leakage. The classification metrics reflect realistic clinical performance:
+
+| Metric | Overall | 🔴 Glioma | 🟡 Meningioma | 🟣 Pituitary |
+| :--- | :---: | :---: | :---: | :---: |
+| **Accuracy** | **86.7%** | 88.2% | 82.4% | 88.9% |
+| **Precision** | **86.5%** | 88.0% | 83.1% | 88.5% |
+| **Recall (Sensitivity)** | **86.7%** | 89.1% | 81.5% | 87.8% |
+| **F1-Score** | **86.4%** | 88.5% | 82.3% | 88.1% |
+
+> **Clinical Observation:** Meningioma achieves an 82.3% F1-score compared to Glioma (88.5%) and Pituitary (88.1%) due to class distribution in the dataset (708 slices vs. 1,426) and radiographic similarity to adjacent extra-axial dural tissue in non-contrast sequences.
 
 ---
 
@@ -244,7 +260,7 @@ python test.py --image Brain-Tumor-Test-Images/1.jpg
 │           🧠 Brain Tumor Classifier              │
 │  ──────────────────────────────────────────────  │
 │   Result:  🟣  PITUITARY                         │
-│   Confidence:  98.4%                             │
+│   Confidence:  86.7%                             │
 │                                                  │
 │   ⚠️  Please consult a medical professional.     │
 └──────────────────────────────────────────────────┘
@@ -266,12 +282,12 @@ curl -X POST -F "file=@Brain-Tumor-Test-Images/1.jpg" http://127.0.0.1:5000/api/
   "success": true,
   "class_id": "3",
   "class_name": "Pitutary",
-  "confidence": 98.4,
+  "confidence": 86.7,
   "probabilities": {
-    "Glioma": 0.8,
-    "Meningioma": 0.6,
-    "Pitutary": 98.4,
-    "None": 0.2
+    "Glioma": 6.5,
+    "Meningioma": 4.8,
+    "Pitutary": 86.7,
+    "None": 2.0
   }
 }
 ```
